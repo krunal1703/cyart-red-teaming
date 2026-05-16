@@ -1,0 +1,60 @@
+# 🛡️ Task 5 — Network Defense with Suricata
+**CyArt Red Teaming — Week 2 | Practical Task 5**
+
+---
+
+## 📌 Objective
+Configure Suricata to block a malicious IP, test the rule, and map alerts to MITRE ATT&CK.
+
+## 🛠️ Tools Used
+| Tool | Purpose |
+|------|---------|
+| Suricata | Open-source IDS/IPS — detects and blocks malicious traffic |
+| CrowdSec | Community-driven security engine for IP blocking |
+| Kali Linux | Host for Suricata installation |
+
+---
+
+## ✅ Steps Performed
+
+### Step 1 — Install Suricata
+```bash
+sudo apt install suricata -y
+suricata --version
+```
+
+### Step 2 — Create Custom Rule
+```bash
+sudo nano /etc/suricata/rules/local.rules
+```
+
+Added rule:
+```
+drop ip 192.168.1.100 any -> any any (msg:"Block Malicious IP - CyArt Week2"; sid:1000001; rev:1;)
+```
+
+### Step 3 — Add Rule to Config
+```bash
+sudo nano /etc/suricata/suricata.yaml
+# Find rule-files: section and add:
+# - local.rules
+```
+
+### Step 4 — Start Suricata
+```bash
+sudo suricata -c /etc/suricata/suricata.yaml -i eth0
+```
+
+### Step 5 — Test the Block
+From another VM, ran:
+```bash
+ping 192.168.1.100
+```
+Result: **Packets blocked** — ping timeout ✅
+
+### Step 6 — Check Logs
+```bash
+tail -f /var/log/suricata/fast.log
+```
+
+---

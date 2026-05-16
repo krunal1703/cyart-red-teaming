@@ -1,0 +1,21 @@
+title: Suspicious PowerShell Activity
+id: a1b2c3d4-1234-5678-abcd-ef1234567890
+status: experimental
+description: Detects suspicious PowerShell command execution using -Command flag which is commonly used by attackers to run encoded or inline malicious scripts
+author: Krunal | CyArt Red Teaming Week 2
+date: 2026/05/12
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    Image|endswith: '\powershell.exe'
+    CommandLine|contains: '-Command'
+  condition: selection
+falsepositives:
+  - Legitimate administrative PowerShell scripts run by IT team
+  - Automated deployment tools using PowerShell
+level: medium
+tags:
+  - attack.execution
+  - attack.t1059.001
